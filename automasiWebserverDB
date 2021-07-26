@@ -1,0 +1,40 @@
+#!/bin/bash
+
+instalasi_apache(){
+  jawaban="Y"
+read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
+if [ $pilih == $jawaban ];
+then
+echo "Menyiapkan Persiapan Installasi"
+sudo apt-get update
+echo "Melakukan Installasi Webserver"
+sudo apt-get install -y apache2 php php-mysql
+echo "Installasi Selesai"
+else
+echo "Installasi dibatalkan"
+exit 1
+fi
+}
+
+installasiDBMysql(){
+jawaban="Y"
+read -p "Apakah kamu yakin akan menginstall Database Mysql ? (Y/n) " pilih;
+if [ $pilih == $jawaban ];
+then
+echo "Melakukan Installasi Database Server"
+sudo apt-get install -y mysql-server
+echo "Installasi Selesai"
+exit 0
+else
+echo "Installasi dibatalkan"
+exit 1
+fi
+}
+
+main(){
+  instalasi_apache
+  installasiDBMysql
+}
+
+main
+

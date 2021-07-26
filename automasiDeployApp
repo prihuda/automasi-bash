@@ -1,0 +1,99 @@
+#!/bin/bash
+automasiDeployLandingPage(){
+jawaban="Y"
+
+read -p "Apakah kamu yakin akan melakukan deploy landing page ? (Y/n) " pilih;
+
+if [ $pilih == $jawaban ];
+then
+    echo "=============================>"
+    echo "Downloading Data"
+    echo "=============================>"
+    wget https://github.com/prihuda/landing-page-rafi/archive/master.zip
+    echo "=============================>"
+    echo "Ekstrak File"
+    echo "=============================>"
+    sudo apt-get install -y unzip
+    unzip master.zip
+    echo "=============================>"
+    echo "Memindahkan data"
+    echo "=============================>"
+    mv landing-page-rafi-master/* /var/www/html/
+    echo "Deploy landing page selesai"
+else
+    echo "Setup dibatalkan"
+    exit 1
+fi
+}
+
+automasiDeployWordpress(){
+jawaban="Y"
+
+read -p "Apakah kamu yakin akan melakukan deploy Wordpress ? (Y/n) " pilih;
+
+if [ $pilih == $jawaban ];
+then
+    echo "=============================>"
+    echo "Downloading Data"
+    echo "=============================>"
+    curl -O https://wordpress.org/latest.tar.gz
+    echo "=============================>"
+    echo "Ekstrak File"
+    echo "=============================>"
+    tar -xvf latest.tar.gz
+    rm latest.tar.gz
+    echo "=============================>"
+    echo "Memindahkan data"
+    echo "=============================>"
+    mv wordpress/* /var/www/html/wordpress-app
+    echo "Deploy wordpress selesai"
+else
+    echo "Setup dibatalkan"
+    exit 1
+fi
+}
+
+automasiDeploySocialMedia(){
+jawaban="Y"
+
+read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
+
+if [ $pilih == $jawaban ];
+then
+    echo "=============================>"
+    echo "Downloading Data"
+    echo "=============================>"
+    rm master.zip
+    rm latest.tar.gz
+    rm -rf wordpress
+    wget https://github.com/prihuda/sosial-media-rafi/archive/master.zip
+    echo "=============================>"
+    echo "Ekstrak File"
+    echo "=============================>"
+    unzip master.zip
+    rm master.zip
+    echo "=============================>"
+    echo "Memindahkan data"
+    echo "=============================>"
+    mv sosial-media-rafi-master/* /var/www/html/sosial-media
+    rm -rf /home/devops/Small_Project/sosial-media-rafi-master
+    rm -rf /home/devops/Small_Project/landing-page-rafi-master
+    rm -rf /home/devops/Small_Project/wordpress
+    echo "Deploy sosial media selesai"
+    exit 0
+else
+    echo "Setup dibatalkan"
+    exit 1
+fi
+}
+
+main(){
+    automasiDeployLandingPage
+    automasiDeployWordpress
+    automasiDeploySocialMedia
+}
+
+main
+
+
+
