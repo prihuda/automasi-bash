@@ -27,35 +27,93 @@ fi
 }
 
 automasiDeployWordpress(){
-jawaban="Y"
+echo "============================================"
+echo "Robot akan menginstall wordpress anda secara automasi!"
+echo "============================================"
+echo "Tulis dbhost: "
+read -e dbhost
+echo "Tulis dbname: "
+read -e dbname
+echo "Tulis dbuser: "
+read -e dbuser
+echo "Tulish dbpass: "
+read -s dbpass
 
-read -p "Apakah kamu yakin akan melakukan deploy Wordpress ? (Y/n) " pilih;
+echo "============================================"
+echo "Database akan divalidasi"
+echo "============================================"
 
-if [ $pilih == $jawaban ];
-then
-    echo "=============================>"
-    echo "Downloading Data"
-    echo "=============================>"
-    curl -O https://wordpress.org/latest.tar.gz
-    echo "=============================>"
-    echo "Ekstrak File"
-    echo "=============================>"
-    tar -xvf latest.tar.gz
-    rm latest.tar.gz
-    echo "=============================>"
-    echo "Memindahkan data"
-    echo "=============================>"
-    mv wordpress/* /var/www/html/wordpress-app
-    echo "Deploy wordpress selesai"
+# mysql="mysql --host=$dbhost --user=$dbuser --password=$dbpass -s -N --execute="SELECT IF(EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbname'), 'Yes','No')";"
+mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
+if [ "$mysql" == "$dbname" ]; then
+	echo "Database telah exist, apakah anda masih mau memakai ini ? (y/n)"
+	read -e usethis
+	if [ "$usethis" == n ]; then
+		echo "Mulai kembali dengan memilih database yang lain"
+		echo "Tekan apa saja untuk keluar"
+		read -s exit
+		exit
+	fi
+
 else
-    echo "Setup dibatalkan"
-    exit 1
+	mysql=`mysql --host=$dbhost --user=$dbuser --password=$dbpass --execute="CREATE DATABASE $dbname";`
+	echo "============================================"
+    echo "Database berhasil dibuat!"
+	echo "============================================"
+fi
+
+echo "Memulai installasi worpress? (y/n)"
+read -e run
+if [ "$run" == n ] ; then
+exit
+else
+echo "===================================================="
+echo "Robot memulai installasi wordpress, harap menunggu..."
+echo "===================================================="
+#Mengambil file wordpress terbaru
+curl -O https://wordpress.org/latest.tar.gz
+#Mengekstrak
+tar -zxvf latest.tar.gz
+#Membuat folder di var/www/html
+mkdir /var/www/html/wordpress-app
+#Memindahkan hasil extrak ke var/www/html
+mv wordpress/* /var/www/html/wordpress-app
+#Menghapus folder wordpress
+rm -rf wordpress
+#Pindah ke /var/www/html/wordpress-app
+cd /var/www/html/wordpress-app
+#Mengkopi wp-config.sample.php ke wp.config.php sebagai config wordpress
+cp wp-config-sample.php wp-config.php
+#Mengubah konfig DB
+perl -pi -e "s/database_name_here/$dbname/g" wp-config.php
+perl -pi -e "s/username_here/$dbuser/g" wp-config.php
+perl -pi -e "s/password_here/$dbpass/g" wp-config.php
+
+#Mengisi WP salt
+perl -i -pe'
+  BEGIN {
+    @chars = ("a" .. "z", "A" .. "Z", 0 .. 9);
+    push @chars, split //, "!@#$%^&*()-_ []{}<>~\`+=,.;:/?|";
+    sub salt { join "", map $chars[ rand @chars ], 1 .. 64 }
+  }
+  s/chagasfe/salt()/ge
+' wp-config.php
+
+#Membuat folder upload dan mengganti permission
+mkdir wp-content/uploads
+chmod 775 wp-content/uploads
+echo "Menghapus hasil curl setelah ekstrak"
+rm /home/devops/Small_Project/latest.tar.gz
+echo "========================="
+echo "Robot telah selesai melakukan installasi, wordpress siap dipakai"
+echo "========================="
 fi
 }
 
 automasiDeploySocialMedia(){
 jawaban="Y"
-
+dbPass=root
+dbUser=root
 read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
 
 if [ $pilih == $jawaban ];
@@ -75,10 +133,26 @@ then
     echo "=============================>"
     echo "Memindahkan data"
     echo "=============================>"
+    rm -rf /var/www/html/sosial-media
+    mkdir /var/www/html/sosial-media
     mv sosial-media-rafi-master/* /var/www/html/sosial-media
     rm -rf /home/devops/Small_Project/sosial-media-rafi-master
     rm -rf /home/devops/Small_Project/landing-page-rafi-master
     rm -rf /home/devops/Small_Project/wordpress
+    echo "=============================>"
+    echo "Import database"
+    echo "=============================>"
+    cd /var/www/html/sosial-media
+    mysql -u root -p$dbPass dbsosmed < dump.sql
+    echo "Selesai import database"
+    echo "=============================>"
+    echo "Setup config php project"
+    echo "=============================>"
+    sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
+    sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
+    echo "Konfigurasi php project selesai"
+    echo "Restart service apache"
+    service apache2 restart
     echo "Deploy sosial media selesai"
     exit 0
 else
@@ -88,8 +162,6 @@ fi
 }
 
 main(){
-    automasiDeployLandingPage
-    automasiDeployWordpress
     automasiDeploySocialMedia
 }
 

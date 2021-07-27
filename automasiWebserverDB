@@ -6,7 +6,7 @@ read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
 then
 echo "Menyiapkan Persiapan Installasi"
-sudo apt-get update
+sudo apt-get update -y
 echo "Melakukan Installasi Webserver"
 sudo apt-get install -y apache2 php php-mysql
 echo "Installasi Selesai"
@@ -21,18 +21,54 @@ jawaban="Y"
 read -p "Apakah kamu yakin akan menginstall Database Mysql ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
 then
-echo "Melakukan Installasi Database Server"
-sudo apt-get install -y mysql-server
+echo "Menyiapkan Persiapan Installasi"
+apt-get update && apt-get upgrade -y
+echo "Melakukan Installasi paket penunjang"
+apt-get -y install zsh htop
+echo "Melakukan Installasi expect"
+aptitude -y install expect
+echo "Menginstall mysql-server secara non interactive and default password root"
+echo "mysql-server-5.7 mysql-server/root_password password root" | debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password root" | debconf-set-selections
+DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
+
+MYSQL_ROOT_PASSWORD=root
+
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root:\"
+send \"$MYSQL_ROOT_PASSWORD\r\"
+expect \"Would you like to setup VALIDATE PASSWORD plugin?\"
+send \"n\r\" 
+expect \"Change the password for root ?\"
+send \"n\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
+
+echo "$SECURE_MYSQL"
+echo "Menghapus package expect"
+aptitude -y purge expect
+echo "Restart service apache"
+service mysql restart
 echo "Installasi Selesai"
-exit 0
+
 else
 echo "Installasi dibatalkan"
 exit 1
 fi
 }
 
+
 main(){
-  instalasi_apache
   installasiDBMysql
 }
 
