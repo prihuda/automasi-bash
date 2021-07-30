@@ -45,7 +45,7 @@ echo "Database akan divalidasi"
 echo "============================================"
 
 # mysql="mysql --host=$dbhost --user=$dbuser --password=$dbpass -s -N --execute="SELECT IF(EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbname'), 'Yes','No')";"
-# mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
+mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
 if [ "$mysql" == "$dbname" ]; then
 	echo "Database telah exist, apakah anda masih mau memakai ini ? (y/n)"
 	read -e usethis
@@ -73,6 +73,7 @@ echo "Proses Deploy sedang berjalan, harap menunggu..."
 echo "===================================================="
 #Mengambil file wordpress terbaru
 cd /tmp
+rm master.zip
 wget https://github.com/prihuda/wordpress-latest/archive/master.zip
 #Mengekstrak
 tar -zxvf latest.tar.gz
