@@ -117,6 +117,7 @@ automasiDeploySocialMedia(){
 jawaban="Y"
 dbPass=gokulemah
 dbUser=rafi
+dbhost=192.168.100.204
 read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
 
 if [ $pilih == $jawaban ];
@@ -150,7 +151,8 @@ then
     echo "=============================>"
     echo "Setup config php project"
     echo "=============================>"
-    sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
+    perl -pi -e "s/localhost/$dbhost/g" config.php
+    #sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
     sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
     sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
     echo "Konfigurasi php project selesai"
