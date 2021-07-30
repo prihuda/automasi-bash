@@ -114,8 +114,8 @@ fi
 
 automasiDeploySocialMedia(){
 jawaban="Y"
-dbPass=rafi
-dbUser=gokulemah
+dbPass=gokulemah
+dbUser=rafi
 read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
 
 if [ $pilih == $jawaban ];
@@ -143,7 +143,7 @@ then
     echo "Import database"
     echo "=============================>"
     cd /var/www/html/sosial-media
-    mysql -u $dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
+    # mysql -u $dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
     mysql -u $dbUser -h '192.168.100.204' -p$dbPass dbsosmed < dump.sql
     echo "Selesai import database"
     echo "=============================>"
