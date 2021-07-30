@@ -45,7 +45,7 @@ echo "Database akan divalidasi"
 echo "============================================"
 
 # mysql="mysql --host=$dbhost --user=$dbuser --password=$dbpass -s -N --execute="SELECT IF(EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbname'), 'Yes','No')";"
-mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
+# mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
 if [ "$mysql" == "$dbname" ]; then
 	echo "Database telah exist, apakah anda masih mau memakai ini ? (y/n)"
 	read -e usethis
@@ -147,6 +147,7 @@ then
     echo "=============================>"
     echo "Setup config php project"
     echo "=============================>"
+    sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
     sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
     sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
     echo "Konfigurasi php project selesai"
