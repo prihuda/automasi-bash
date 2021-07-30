@@ -69,7 +69,7 @@ if [ "$run" == n ] ; then
 exit
 else
 echo "===================================================="
-echo "Robot memulai installasi wordpress, harap menunggu..."
+echo "Proses Deploy sedang berjalan, harap menunggu..."
 echo "===================================================="
 #Mengambil file wordpress terbaru
 cd /tmp
@@ -106,7 +106,7 @@ perl -i -pe'
 mkdir wp-content/uploads
 chmod 775 wp-content/uploads
 echo "========================="
-echo "Robot telah selesai melakukan installasi, wordpress siap dipakai"
+echo "Proses deploy telah selesai wordpress siap dipakai"
 echo "========================="
 fi
 }

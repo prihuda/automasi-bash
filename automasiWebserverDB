@@ -18,7 +18,7 @@ fi
 
 installasiDBMysql(){
 jawaban="Y"
-read -p "Apakah kamu yakin akan menginstall Database Mysql ? (Y/n) " pilih;
+read -p "Apakah kamu yakin akan menginstall database mysql ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
 then
 echo "Menyiapkan Persiapan Installasi"
@@ -61,9 +61,10 @@ mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'rafi'@'
 mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER 'rafi'@'%' IDENTIFIED BY 'gokulemah';"
 mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'rafi'@'%' WITH GRANT OPTION;"
 mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
-# echo "Membuat mysql bisa diakses secara public"
-# cd /etc/mysql/mysql.conf.d
-# sed -i -e '/bind-address =/ s/= .*/= "192.168.100.204";/' mysqld.cnf
+echo "Membuat mysql bisa diakses secara public"
+#mv /etc/mysql/mysql.conf.d/mysqld.cnf /tmp
+sudo sed -i "s/.*bind-address.*/bind-address = 192.168.100.204/" /etc/mysql/mysql.conf.d/mysqld.cnf
+#mv /tmp/mysqld.cnf /etc/mysql/mysql.conf.d
 echo "Menghapus package expect"
 sudo aptitude -y purge expect
 echo "Restart service mysql"
