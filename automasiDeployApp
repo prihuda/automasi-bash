@@ -20,6 +20,7 @@ then
     echo "Memindahkan data"
     echo "=============================>"
     mv landing-page-rafi-master/* /var/www/html/
+    rm -rf landing-page-rafi-master
     echo "Deploy landing page selesai"
 else
     echo "Setup dibatalkan"
@@ -138,6 +139,7 @@ then
     rm -rf /var/www/html/sosial-media
     mkdir /var/www/html/sosial-media
     mv sosial-media-rafi-master/* /var/www/html/sosial-media
+    rm -rf sosial-media-rafi-master
     echo "=============================>"
     echo "Import database"
     echo "=============================>"
