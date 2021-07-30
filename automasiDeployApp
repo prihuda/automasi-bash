@@ -92,7 +92,7 @@ cp wp-config-sample.php wp-config.php
 perl -pi -e "s/database_name_here/$dbname/g" wp-config.php
 perl -pi -e "s/username_here/$dbuser/g" wp-config.php
 perl -pi -e "s/password_here/$dbpass/g" wp-config.php
-perl -pi -e "s/host_here/$dbhost/g" wp-config.php
+perl -pi -e "s/localhost/$dbhost/g" wp-config.php
 
 #Mengisi WP salt
 perl -i -pe'
