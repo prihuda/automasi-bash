@@ -141,8 +141,8 @@ then
     echo "Import database"
     echo "=============================>"
     cd /var/www/html/sosial-media
-    mysql -u$dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
-    mysql -u$dbUser -h '192.168.100.204' -p$dbPass dbsosmed < dump.sql
+    mysql -u $dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
+    mysql -u $dbUser -h '192.168.100.204' -p$dbPass dbsosmed < dump.sql
     echo "Selesai import database"
     echo "=============================>"
     echo "Setup config php project"
