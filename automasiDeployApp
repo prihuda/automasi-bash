@@ -77,12 +77,12 @@ cd /tmp
 rm master.zip
 wget https://github.com/prihuda/wordpress-latest/archive/master.zip
 #Mengekstrak
-tar -zxvf latest.tar.gz
+unzip master.zip
 #Membuat folder di var/www/html
 rm -rf /var/www/html/wordpress-app
 mkdir /var/www/html/wordpress-app
 #Memindahkan hasil extrak ke var/www/html
-mv wordpress/* /var/www/html/wordpress-app
+mv wordpress-latest-master/* /var/www/html/wordpress-app
 #Menghapus folder wordpress
 rm -rf wordpress
 #Pindah ke /var/www/html/wordpress-app
