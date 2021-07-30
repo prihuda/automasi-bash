@@ -9,6 +9,7 @@ then
     echo "=============================>"
     echo "Downloading Data"
     echo "=============================>"
+    cd /tmp
     wget https://github.com/prihuda/landing-page-rafi/archive/master.zip
     echo "=============================>"
     echo "Ekstrak File"
@@ -71,10 +72,12 @@ echo "===================================================="
 echo "Robot memulai installasi wordpress, harap menunggu..."
 echo "===================================================="
 #Mengambil file wordpress terbaru
-curl -O https://wordpress.org/latest.tar.gz
+cd /tmp
+wget https://github.com/prihuda/wordpress-latest/archive/master.zip
 #Mengekstrak
 tar -zxvf latest.tar.gz
 #Membuat folder di var/www/html
+rm -rf /var/www/html/wordpress-app
 mkdir /var/www/html/wordpress-app
 #Memindahkan hasil extrak ke var/www/html
 mv wordpress/* /var/www/html/wordpress-app
@@ -102,8 +105,6 @@ perl -i -pe'
 #Membuat folder upload dan mengganti permission
 mkdir wp-content/uploads
 chmod 775 wp-content/uploads
-echo "Menghapus hasil curl setelah ekstrak"
-rm /home/devops/Small_Project/latest.tar.gz
 echo "========================="
 echo "Robot telah selesai melakukan installasi, wordpress siap dipakai"
 echo "========================="
@@ -112,8 +113,8 @@ fi
 
 automasiDeploySocialMedia(){
 jawaban="Y"
-dbPass=root
-dbUser=root
+dbPass=rafi
+dbUser=gokulemah
 read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
 
 if [ $pilih == $jawaban ];
@@ -121,9 +122,9 @@ then
     echo "=============================>"
     echo "Downloading Data"
     echo "=============================>"
+    cd /tmp
     rm master.zip
     rm latest.tar.gz
-    rm -rf wordpress
     wget https://github.com/prihuda/sosial-media-rafi/archive/master.zip
     echo "=============================>"
     echo "Ekstrak File"
@@ -136,14 +137,12 @@ then
     rm -rf /var/www/html/sosial-media
     mkdir /var/www/html/sosial-media
     mv sosial-media-rafi-master/* /var/www/html/sosial-media
-    rm -rf /home/devops/Small_Project/sosial-media-rafi-master
-    rm -rf /home/devops/Small_Project/landing-page-rafi-master
-    rm -rf /home/devops/Small_Project/wordpress
     echo "=============================>"
     echo "Import database"
     echo "=============================>"
     cd /var/www/html/sosial-media
-    mysql -u root -p$dbPass dbsosmed < dump.sql
+    mysql -u$dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
+    mysql -u$dbUser -h '192.168.100.204' -p$dbPass dbsosmed < dump.sql
     echo "Selesai import database"
     echo "=============================>"
     echo "Setup config php project"
@@ -162,6 +161,8 @@ fi
 }
 
 main(){
+    automasiDeployLandingPage
+    automasiDeployWordpress
     automasiDeploySocialMedia
 }
 
