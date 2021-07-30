@@ -30,7 +30,7 @@ fi
 
 automasiDeployWordpress(){
 echo "============================================"
-echo "Robot akan menginstall wordpress anda secara automasi!"
+echo "Wordpress anda akan terinstall secara automasi, Enjoy!"
 echo "============================================"
 echo "Tulis dbhost: "
 read -e dbhost
@@ -64,7 +64,7 @@ else
 	echo "============================================"
 fi
 
-echo "Memulai installasi worpress? (y/n)"
+echo "Apakah kamu yakin akan menginstall wordpress? (y/n)"
 read -e run
 if [ "$run" == n ] ; then
 exit
@@ -115,9 +115,40 @@ fi
 
 automasiDeploySocialMedia(){
 jawaban="Y"
-dbPass=gokulemah
-dbUser=rafi
-dbhost=192.168.100.204
+echo "============================================"
+echo "Sosial-Media anda akan terinstall secara automasi, Enjoy!"
+echo "============================================"
+echo "Tulis dbhost: "
+read -e dbhost
+echo "Tulis dbname: "
+read -e dbname
+echo "Tulis dbuser: "
+read -e dbuser
+echo "Tulis dbpass: "
+read -s dbpass
+
+echo "============================================"
+echo "Database akan divalidasi"
+echo "============================================"
+
+# mysql="mysql --host=$dbhost --user=$dbuser --password=$dbpass -s -N --execute="SELECT IF(EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbname'), 'Yes','No')";"
+mysql=`mysqlshow --host=$dbhost --user=$dbuser --password=$dbpass $dbname| grep -v Wildcard | grep -o $dbname`
+if [ "$mysql" == "$dbname" ]; then
+	echo "Database telah exist, apakah anda masih mau memakai ini ? (y/n)"
+	read -e usethis
+	if [ "$usethis" == n ]; then
+		echo "Mulai kembali dengan memilih database yang lain"
+		echo "Tekan apa saja untuk keluar"
+		read -s exit
+		exit
+	fi
+
+else
+	mysql=`mysql --host=$dbhost --user=$dbuser --password=$dbpass --execute="CREATE DATABASE $dbname";`
+	echo "============================================"
+    echo "Database berhasil dibuat!"
+	echo "============================================"
+fi
 read -p "Apakah kamu yakin akan melakukan deploy sosial media ? (Y/n) " pilih;
 
 if [ $pilih == $jawaban ];
@@ -152,8 +183,8 @@ then
     echo "Setup config php project"
     echo "=============================>"
     perl -pi -e "s/localhost/$dbhost/g" config.php
-    perl -pi -e "s/devopscilsy/$dbUser/g" config.php
-    perl -pi -e "s/1234567890/$dbPass/g" config.php
+    perl -pi -e "s/devopscilsy/$dbuser/g" config.php
+    perl -pi -e "s/1234567890/$dbpass/g" config.php
     #sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
     #sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
     #sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
