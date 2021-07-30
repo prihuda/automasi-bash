@@ -152,9 +152,11 @@ then
     echo "Setup config php project"
     echo "=============================>"
     perl -pi -e "s/localhost/$dbhost/g" config.php
+    perl -pi -e "s/devopscilsy/$dbUser/g" config.php
+    perl -pi -e "s/1234567890/$dbPass/g" config.php
     #sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
-    sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
-    sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
+    #sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
+    #sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
     echo "Konfigurasi php project selesai"
     echo "Restart service apache"
     service apache2 restart
