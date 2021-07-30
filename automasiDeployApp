@@ -177,7 +177,7 @@ then
     echo "=============================>"
     cd /var/www/html/sosial-media
     # mysql -u $dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
-    mysql -u $dbUser -h '192.168.100.204' -p$dbPass dbsosmed < dump.sql
+    mysql -u $dbuser -h '192.168.100.204' -p$dbpass dbsosmed < dump.sql
     echo "Selesai import database"
     echo "=============================>"
     echo "Setup config php project"
@@ -185,9 +185,6 @@ then
     perl -pi -e "s/localhost/$dbhost/g" config.php
     perl -pi -e "s/devopscilsy/$dbuser/g" config.php
     perl -pi -e "s/1234567890/$dbpass/g" config.php
-    #sed -i -e '/db_host =/ s/= .*/= 192.168.100.204;/' config.php
-    #sed -i -e '/db_pass =/ s/= .*/= "'${dbPass}'";/' config.php
-    #sed -i -e '/db_user =/ s/= .*/= "'${dbUser}'";/' config.php
     echo "Konfigurasi php project selesai"
     echo "Restart service apache"
     service apache2 restart
