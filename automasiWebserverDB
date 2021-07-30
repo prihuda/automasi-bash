@@ -33,7 +33,6 @@ echo "mysql-server-5.7 mysql-server/root_password_again password root" | debconf
 DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.7
 
 MYSQL_ROOT_PASSWORD=root
-ip_address = 192.168.100.204
 
 SECURE_MYSQL=$(expect -c "
 set timeout 10
@@ -62,9 +61,9 @@ mysql -uroot -pMYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'rafi'@'lo
 mysql -uroot -pMYSQL_ROOT_PASSWORD -e "CREATE USER 'rafi'@'%' IDENTIFIED BY 'gokulemah';"
 mysql -uroot -pMYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'rafi'@'%' WITH GRANT OPTION;"
 mysql -uroot -pMYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
-echo "Membuat mysql bisa diakses secara public"
-cd /etc/mysql/mysql.conf.d
-sed -i -e '/bind-address =/ s/= .*/= "'${ip_address}'";/' mysqld.cnf
+# echo "Membuat mysql bisa diakses secara public"
+# cd /etc/mysql/mysql.conf.d
+# sed -i -e '/bind-address =/ s/= .*/= "192.168.100.204";/' mysqld.cnf
 echo "Menghapus package expect"
 sudo aptitude -y purge expect
 echo "Restart service mysql"
