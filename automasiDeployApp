@@ -197,12 +197,9 @@ fi
 }
 
 main(){
-    #automasiDeployLandingPage
+    automasiDeployLandingPage
     automasiDeployWordpress
-    #automasiDeploySocialMedia
+    automasiDeploySocialMedia
 }
 
 main
-
-
-
