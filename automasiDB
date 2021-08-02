@@ -1,22 +1,6 @@
 #!/bin/bash
 
-installasiWebserverApache(){
-  jawaban="Y"
-read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
-if [ $pilih == $jawaban ];
-then
-echo "Menyiapkan Persiapan Installasi"
-sudo apt-get update && apt-get upgrade -y
-echo "Melakukan Installasi Webserver"
-sudo apt-get install -y apache2 php php-mysql mysql-client-core-5.7 mysql-client-5.7 dos2unix
-echo "Installasi Selesai"
-else
-echo "Installasi dibatalkan"
-exit 1
-fi
-}
-
-installasiDBMysql(){
+gokinstallasiDBMysql(){
 jawaban="Y"
 read -p "Apakah kamu yakin akan menginstall database mysql ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
