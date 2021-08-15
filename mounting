@@ -1,55 +1,56 @@
 #!/bin/bash
 
-installasiWebserverApache(){
+installasiMounting(){
   jawaban="Y"
-read =p "Automasi Mounting? (Y/n) " pilih;
+read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
 then
 ===========================================
 echo "Menyiapkan persiapan installasi"
 ===========================================
-sudo apt=get update && apt=get upgrade =y
+sudo apt-get update && apt-get upgrade -y
 ===========================================
 echo "Melakukan installasi yang dibutuhkan"
-============================================
-sudo apt=get install automake autotools=dev fuse g++ git libcurl4=gnutls=dev libfuse=dev libssl=dev libxml2=dev make pkg=config =y
-============================================
+===========================================
+sudo apt-get install automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
+===========================================
 echo "Mengclone git untuk mounting"
-git clone https://github.com/s3fs=fuse/s3fs=fuse.git
-=====================================================================
+git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+====================================================================
 echo "Pindah ke direktori mounting dan eksekusi file yang dibutuhkan"
-======================================================================
-cd s3fs=fuse
+====================================================================
+cd s3fs-fuse
 chmod +x autogen.sh
 ./autogen.sh
-./configure ==prefix=/usr ==with=openssl
+./configure --prefix=/usr --with-openssl
 =============================================================================
 echo "Menginstall make dan membuat file password serta diisi dengan hak akses"
 =============================================================================
 make
 sudo make install
-echo accesskey_kamu:secretkey_kamu > /etc/passwd=s3fs
-perl =pi =e "s/accesskey_kamu/AKIAYIE7O6OUBNYFQJUC/g" /etc/passwd=s3fs
-perl =pi =e "s/secretkey_kamu/Weff5DzudjyrwVpfQ5m3YxSNOd7Xoj6Gi3PdGhTw/g" /etc/passwd=s3fs
-======================================================================
+echo accesskey_kamu:secretkey_kamu > /etc/passwd-s3fs
+perl -pi -e "s/accesskey_kamu/AKIAYIE7O6OUBNYFQJUC/g" /etc/passwd-s3fs
+perl -pi -e "s/secretkey_kamu/Weff5DzudjyrwVpfQ5m3YxSNOd7Xoj6Gi3PdGhTw/g" /etc/passwd-s3fs
+====================================================================
 echo "Membuat direktori di root folder dan mengeksekusi kode mounting"
-======================================================================
+====================================================================
 mkdir /root/AWSMountingBucket
-sudo s3fs storage1=aplikasi2 /root/AWSMountingBucket =o passwd_file=/etc/passwd=s3fs/.passwd=s3fs =
-o url=https://s3.ap=southeast=1.amazonaws.com =ouid=1001,gid=1001,allow_other
-=================================
+sudo s3fs storage1-aplikasi2 /root/AWSMountingBucket -o passwd_file=/etc/passwd-s3fs/.passwd-s3fs -
+o url=https://s3.ap-southeast-1.amazonaws.com -ouid=1001,gid=1001,allow_other
+===============================
 echo "Mengcheck hasil mounting"
-df =Th
-================================
+===============================
+df -Th
+===========================
 echo "Installasi Selesai"
+===========================
 else
 echo "Installasi dibatalkan"
-exit 1
 fi
 }
 
 main(){
-  installasiWebserverApache
+  installasiMounting
 }
 
 main
