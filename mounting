@@ -1,9 +1,9 @@
 #!/bin/bash
 
 installasiMounting(){
-  jawaban"Y"
+  jawaban="Y"
 read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
-if [ $pilih  $jawaban ];
+if [ $pilih == $jawaban ];
 then
 echo "Menyiapkan persiapan installasi"
 sudo apt-get update && apt-get upgrade -y
@@ -15,7 +15,7 @@ echo "Pindah ke direktori mounting dan eksekusi file yang dibutuhkan"
 cd s3fs-fuse
 chmod +x autogen.sh
 ./autogen.sh
-./configure --prefix/usr --with-openssl
+./configure --prefix=/usr --with-openssl
 echo "Menginstall make dan membuat file password serta diisi dengan hak akses"
 make
 sudo make install
