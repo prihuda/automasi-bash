@@ -2,35 +2,53 @@
 
 installasiMounting(){
   jawaban="Y"
-read -p "Apakah kamu yakin akan menginstall webserver ? (Y/n) " pilih;
+read -p "Memounting S3 pada instance ? (Y/n) " pilih;
 if [ $pilih == $jawaban ];
 then
+echo "-------------------------------------"
 echo "Menyiapkan persiapan installasi"
+echo "-------------------------------------"
 sudo apt-get update && apt-get upgrade -y
+echo "-------------------------------------"
 echo "Melakukan installasi yang dibutuhkan"
+echo "-------------------------------------"
 sudo apt-get install automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
+echo "-------------------------------------"
 echo "Mengclone git untuk mounting"
+echo "-------------------------------------"
 git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+echo "------------------------------------------------------------------"
 echo "Pindah ke direktori mounting dan eksekusi file yang dibutuhkan"
+echo "------------------------------------------------------------------"
 cd s3fs-fuse
 chmod +x autogen.sh
 ./autogen.sh
 ./configure --prefix=/usr --with-openssl
+echo "-----------------------------------------------------------------------"
 echo "Menginstall make dan membuat file password serta diisi dengan hak akses"
+echo "-----------------------------------------------------------------------"
 make
 sudo make install
 echo accesskey_kamu:secretkey_kamu > /etc/passwd-s3fs
 perl -pi -e "s/accesskey_kamu/AKIAYIE7O6OUBNYFQJUC/g" /etc/passwd-s3fs
 perl -pi -e "s/secretkey_kamu/Weff5DzudjyrwVpfQ5m3YxSNOd7Xoj6Gi3PdGhTw/g" /etc/passwd-s3fs
+chmod 640 /etc/passwd-s3fs
+echo "-----------------------------------------------------------------------"
 echo "Membuat direktori di root folder dan mengeksekusi kode mounting"
+echo "-----------------------------------------------------------------------"
 mkdir /root/AWSMountingBucket
-cd /root/AWSMountingBucket
-sudo s3fs storage1-aplikasi2 /root/AWSMountingBucket -o passwd_file=/etc/.passwd-s3fs -o urlhttps://s3.ap-southeast-1.amazonaws.com -ouid1001,gid1001,allow_other
+sudo s3fs storage1-aplikasi2 /root/AWSMountingBucket -o passwd_file=/etc/passwd-s3fs -o url=https://s3.ap-southeast-1.amazonaws.com -ouid=1001,gid=1001,allow_other
+echo "-----------------------------------------------------------------------"
 echo "Mengcheck hasil mounting"
+echo "-----------------------------------------------------------------------"
 df -Th
+echo "********************"
 echo "Installasi Selesai"
+echo "********************"
 else
+echo "*********************"
 echo "Installasi dibatalkan"
+echo "********************"
 fi
 }
 
