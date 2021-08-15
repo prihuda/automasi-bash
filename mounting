@@ -25,8 +25,7 @@ perl -pi -e "s/secretkey_kamu/Weff5DzudjyrwVpfQ5m3YxSNOd7Xoj6Gi3PdGhTw/g" /etc/p
 echo "Membuat direktori di root folder dan mengeksekusi kode mounting"
 mkdir /root/AWSMountingBucket
 cd /root/AWSMountingBucket
-sudo s3fs storage1-aplikasi2 /root/AWSMountingBucket -o passwd_file=/etc/passwd-s3fs/.passwd-s3fs -
-o urlhttps://s3.ap-southeast-1.amazonaws.com -ouid1001,gid1001,allow_other
+sudo s3fs storage1-aplikasi2 /root/AWSMountingBucket -o passwd_file=/etc/.passwd-s3fs -o urlhttps://s3.ap-southeast-1.amazonaws.com -ouid1001,gid1001,allow_other
 echo "Mengcheck hasil mounting"
 df -Th
 echo "Installasi Selesai"
