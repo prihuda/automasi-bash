@@ -157,31 +157,31 @@ then
     echo "Downloading Data"
     echo "=============================>"
     cd /tmp
-    rm master.zip
-    rm latest.tar.gz
-    wget https://github.com/prihuda/sosial-media-rafi/archive/master.zip
-    echo "=============================>"
-    echo "Ekstrak File"
-    echo "=============================>"
-    unzip master.zip
-    rm master.zip
+    #rm master.zip
+    #rm latest.tar.gz
+    #wget https://github.com/prihuda/sosial-media-rafi/archive/master.zip
+    #echo "=============================>"
+    #echo "Ekstrak File"
+    #echo "=============================>"
+    #unzip master.zip
+    #rm master.zip
     echo "=============================>"
     echo "Memindahkan data"
     echo "=============================>"
     rm -rf /var/www/html/sosial-media
     mkdir /var/www/html/sosial-media
-    mv sosial-media-rafi-master/* /var/www/html/sosial-media
-    rm -rf sosial-media-rafi-master
-    echo "=============================>"
-    echo "Import database"
-    echo "=============================>"
-    cd /var/www/html/sosial-media
+    mv /home/ubuntu/sosial-media/* /var/www/html/
+    #rm -rf sosial-media-rafi-master
+    #echo "=============================>"
+    #echo "Import database"
+    #echo "=============================>"
+    cd /var/www/html/
     # mysql -u $dbUser -h '192.168.100.204' -p$dbPass -e "CREATE DATABASE dbsosmed;"
-    mysql -u $dbuser -h '192.168.100.204' -p$dbpass dbsosmed < dump.sql
-    echo "Selesai import database"
-    echo "=============================>"
-    echo "Setup config php project"
-    echo "=============================>"
+    #mysql -u $dbuser -h '192.168.100.204' -p$dbpass dbsosmed < dump.sql
+    #echo "Selesai import database"
+    #echo "=============================>"
+    #echo "Setup config php project"
+    #echo "=============================>"
     perl -pi -e "s/localhost/$dbhost/g" config.php
     perl -pi -e "s/devopscilsy/$dbuser/g" config.php
     perl -pi -e "s/1234567890/$dbpass/g" config.php
@@ -197,8 +197,8 @@ fi
 }
 
 main(){
-    automasiDeployLandingPage
-    automasiDeployWordpress
+    #automasiDeployLandingPage
+    #automasiDeployWordpress
     automasiDeploySocialMedia
 }
 
